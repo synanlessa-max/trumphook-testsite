@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trumphook</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0b0b0e;
+            --card-bg: #111115;
+            --card-border: #1a1a20;
+            --text-main: #ffffff;
+            --text-sub: #6c6c7d;
+            --accent-red: #ff3b30;
+            --accent-red-bg: rgba(255, 59, 48, 0.12);
+            --nav-active: #18181f;
+            --btn-white: #ffffff;
+            --btn-white-hover: #e2e2e2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header / Top Bar --- */
+        header {
+            height: 60px;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            background: #09090c;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-logo {
+            width: 26px;
+            height: 26px;
+            background: #1c1c24;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #a0a0b0;
+            font-weight: 600;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #0d0d11;
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid #16161c;
+        }
+
+        nav button {
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        nav button:hover {
+            color: var(--text-main);
+        }
+
+        nav button.active {
+            background: var(--nav-active);
+            color: var(--text-main);
+            border: 1px solid #252530;
+        }
+
+        nav button.nav-management {
+            color: #ff453a;
+        }
+
+        nav button.nav-management.active {
+            background: var(--accent-red-bg);
+            border-color: rgba(255, 59, 48, 0.3);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .user-avatar-small {
+            width: 26px;
+            height: 26px;
+            background: #22222a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #fff;
+        }
+
+        /* --- Main Content Area --- */
+        main {
+            max-width: 900px;
+            width: 100%;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card-header {
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        /* --- Profile Box --- */
+        .profile-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .profile-avatar {
+            width: 44px;
+            height: 44px;
+            background: #1c1c24;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .username-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .badge-owner {
+            background: var(--accent-red-bg);
+            color: var(--accent-red);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-line {
+            font-size: 12px;
+            color: var(--text-sub);
+        }
+
+        .meta-line span {
+            color: #4ba3e3;
+        }
+
+        /* --- Download Button --- */
+        .btn-download {
+            background: var(--btn-white);
+            color: #000;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+            margin-top: 12px;
+        }
+
+        .btn-download:hover {
+            background: var(--btn-white-hover);
+        }
+
+        /* --- Auth Modal --- */
+        #auth-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(5, 5, 7, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .auth-card {
+            width: 360px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .auth-card h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            background: #09090c;
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            color: #fff;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .form-group input:focus {
+            border-color: #333344;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 10px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .toggle-auth {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 12px;
+            color: var(--text-sub);
+            cursor: pointer;
+        }
+
+        .toggle-auth:hover {
+            color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Generic Table for Management & Invites */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px 0;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        th { color: var(--text-sub); font-size: 11px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Header -->
+    <header id="main-header" style="display: none;">
+        <div class="brand">
+            <div class="brand-logo">T</div>
+            <span>trumphook</span>
+        </div>
+
+        <nav>
+            <button class="active" onclick="switchTab('dashboard', this)">
+                <i class="fa-solid fa-border-all"></i> Dashboard
+            </button>
+            <button onclick="switchTab('forum', this)">
+                <i class="fa-regular fa-comments"></i> Forum
+            </button>
+            <button onclick="switchTab('invites', this)">
+                <i class="fa-solid fa-gift"></i> Invites
+            </button>
+            <button class="nav-management" id="nav-mgmt-btn" style="display: none;" onclick="switchTab('management', this)">
+                <i class="fa-solid fa-shield-halved"></i> Management
+            </button>
+        </nav>
+
+        <div class="user-menu">
+            <div class="user-avatar-small" id="header-avatar">O</div>
+            <span id="header-username">owner</span>
+            <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="margin-left: 10px; cursor: pointer; color: var(--text-sub);"></i>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main id="app-content" style="display: none;">
+        
+        <!-- DASHBOARD TAB -->
+        <div id="tab-dashboard" class="tab-content active">
+            <div class="page-title">Your Profile</div>
+            <div class="page-subtitle">Your account information</div>
+
+            <!-- Profile Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Profile</div>
+                    <div class="card-subtitle">Your account information</div>
+                </div>
+
+                <div class="profile-row">
+                    <div class="profile-avatar" id="profile-avatar">O</div>
+                    <div class="user-info">
+                        <div class="username-line">
+                            <span id="profile-username">owner</span>
+                            <span class="badge-owner" id="profile-role">OWNER</span>
+                        </div>
+                        <div class="meta-line">
+                            UID: <strong id="profile-uid">1</strong> • Registered: <span id="profile-date">13.08.2026</span> • Invited by: <span id="profile-inviter">Code (sdsds)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download Build Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Download Build</div>
+                    <div class="card-subtitle">Download the latest .dll file</div>
+                </div>
+
+                <button class="btn-download" onclick="downloadDLL()">
+                    <i class="fa-solid fa-download"></i> Download DLL
+                </button>
+            </div>
+
+            <!-- Owner Upload DLL Area -->
+            <div class="card" id="owner-upload-card" style="display: none; border-color: rgba(255, 59, 48, 0.3);">
+                <div class="card-header">
+                    <div class="card-title" style="color: var(--accent-red);">Update Build (Owner)</div>
+                    <div class="card-subtitle">Upload replacement .dll file to the server</div>
+                </div>
+                <input type="file" id="dll-file-input" accept=".dll" style="margin-bottom: 12px; font-size: 12px;">
+                <br>
+                <button class="btn-download" onclick="uploadDLL()" style="background: var(--accent-red); color: #fff;">
+                    Upload File
+                </button>
+            </div>
+        </div>
+
+        <!-- FORUM / CHAT TAB -->
+        <div id="tab-forum" class="tab-content">
+            <div class="page-title">Forum & Chat</div>
+            <div class="page-subtitle">Community discussions</div>
+            <div class="card">
+                <div id="chat-box" style="height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;"></div>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="chat-input" placeholder="Type message..." style="flex: 1; padding: 10px; background: #09090c; border: 1px solid var(--card-border); border-radius: 6px; color: #fff;">
+                    <button class="btn-download" onclick="sendChatMessage()" style="margin: 0;">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- INVITES TAB -->
+        <div id="tab-invites" class="tab-content">
+            <div class="page-title">Invites</div>
+            <div class="page-subtitle">Manage your invitation codes</div>
+            <div class="card">
+                <button class="btn-download" onclick="generateInvite()" style="margin: 0 0 16px 0;">Generate Code</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Invite Code</th>
+                            <th>Used By</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invites-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MANAGEMENT TAB -->
+        <div id="tab-management" class="tab-content">
+            <div class="page-title">Management</div>
+            <div class="page-subtitle">Admin user administration</div>
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>UID</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Invited By</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- AUTH MODAL OVERLAY -->
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <h2 id="auth-title">trumphook</h2>
+
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="auth-username" placeholder="Username">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="auth-password" placeholder="Password">
+            </div>
+
+            <div class="form-group" id="invite-group" style="display: none;">
+                <label>Invite Code</label>
+                <input type="text" id="auth-invite" placeholder="TRUMP-XXXXXX">
+            </div>
+
+            <button class="auth-btn" id="auth-btn" onclick="handleAuth()">Sign In</button>
+            <div class="toggle-auth" id="toggle-auth" onclick="toggleAuthMode()">Don't have an account? Sign Up</div>
+        </div>
+    </div>
+
+    <script>
+        const API = "http://127.0.0.1:8000/api";
+        let isRegisterMode = false;
+
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+            document.getElementById('auth-btn').innerText = isRegisterMode ? "Sign Up" : "Sign In";
+            document.getElementById('toggle-auth').innerText = isRegisterMode ? "Already have an account? Sign In" : "Don't have an account? Sign Up";
+            document.getElementById('invite-group').style.display = isRegisterMode ? "block" : "none";
+        }
+
+        async function handleAuth() {
+            const username = document.getElementById('auth-username').value;
+            const password = document.getElementById('auth-password').value;
+            const invite_code = document.getElementById('auth-invite').value;
+
+            if (!username || !password) return alert("Fill in username and password!");
+
+            try {
+                if (isRegisterMode) {
+                    const res = await fetch(`${API}/auth/register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username, password, invite_code })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.detail);
+                    localStorage.setItem('token', data.access_token);
+                } else {
+                    const formData = new URLSearchParams();
+                    formData.append('username', username);
+                    formData.append('password', password);
+
+                    const res = await fetch(`${API}/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: formData
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.detail);
+                    localStorage.setItem('token', data.access_token);
+                }
+
+                initApp();
+            } catch (err) {
+                alert("Error: " + err.message);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            document.location.reload(); // Перезагружаем страницу, чтобы восстановить удаленные элементы при повторном входе
+        }
+
+        async function apiFetch(endpoint, options = {}) {
+            const token = localStorage.getItem('token');
+            options.headers = {
+                ...options.headers,
+                'Authorization': `Bearer ${token}`
+            };
+
+            const res = await fetch(`${API}${endpoint}`, options);
+            if (res.status === 401 || res.status === 403) {
+                const data = await res.json();
+                if (data.detail === "Account is banned") alert("Account is banned!");
+                logout();
+                throw new Error(data.detail);
+            }
+            return res;
+        }
+
+        async function initApp() {
+            try {
+                const res = await apiFetch('/users/me');
+                const user = await res.json();
+
+                document.getElementById('auth-overlay').style.display = "none";
+                document.getElementById('main-header').style.display = "flex";
+                document.getElementById('app-content').style.display = "block";
+
+                // Header details
+                document.getElementById('header-username').innerText = user.username;
+                document.getElementById('header-avatar').innerText = user.username.charAt(0).toUpperCase();
+
+                // Profile details
+                document.getElementById('profile-username').innerText = user.username;
+                document.getElementById('profile-avatar').innerText = user.username.charAt(0).toUpperCase();
+                document.getElementById('profile-role').innerText = user.role.toUpperCase();
+                document.getElementById('profile-uid').innerText = user.uid;
+                document.getElementById('profile-date').innerText = user.created_at;
+                document.getElementById('profile-inviter').innerText = user.invited_by;
+
+                // --- ЖЕСТКАЯ ЗАЩИТА: Физическое удаление элементов из DOM ---
+                const role = (user.role || 'user').toLowerCase();
+
+                // Если юзер НЕ owner и НЕ admin — намертво сносим кнопку и контент Management
+                if (role !== 'owner' && role !== 'admin') {
+                    const mgmtBtn = document.getElementById('nav-mgmt-btn');
+                    if (mgmtBtn) mgmtBtn.remove();
+
+                    const mgmtTab = document.getElementById('tab-management');
+                    if (mgmtTab) mgmtTab.remove();
+                } else {
+                    const mgmtBtn = document.getElementById('nav-mgmt-btn');
+                    if (mgmtBtn) mgmtBtn.style.display = "flex";
+                }
+
+                // Если юзер НЕ owner — намертво сносим форму загрузки .dll
+                if (role !== 'owner') {
+                    const ownerUploadCard = document.getElementById('owner-upload-card');
+                    if (ownerUploadCard) ownerUploadCard.remove();
+                } else {
+                    const ownerUploadCard = document.getElementById('owner-upload-card');
+                    if (ownerUploadCard) ownerUploadCard.style.display = "block";
+                }
+
+                loadChat();
+                loadInvites();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function switchTab(tabName, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+
+            const targetTab = document.getElementById(`tab-${tabName}`);
+            if (targetTab) {
+                targetTab.classList.add('active');
+                btnElement.classList.add('active');
+
+                if (tabName === 'management') loadAdminUsers();
+            }
+        }
+
+        async function downloadDLL() {
+            try {
+                const res = await apiFetch('/download/dll');
+                if (!res.ok) throw new Error("DLL file not uploaded on server yet.");
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = "trumphook.dll";
+                a.click();
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        async function uploadDLL() {
+            const fileInput = document.getElementById('dll-file-input');
+            if (!fileInput || !fileInput.files[0]) return alert("Select .dll file!");
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const res = await apiFetch('/admin/upload-dll', { method: 'POST', body: formData });
+                if (res.ok) alert("DLL successfully updated!");
+            } catch (err) {
+                alert("Upload failed");
+            }
+        }
+
+        async function loadChat() {
+            try {
+                const res = await apiFetch('/chat');
+                const messages = await res.json();
+                const box = document.getElementById('chat-box');
+                box.innerHTML = messages.map(m => `
+                    <div style="font-size: 12px; background: #09090c; padding: 8px 12px; border-radius: 6px;">
+                        <strong style="color: ${m.role === 'owner' ? 'var(--accent-red)' : '#fff'};">[${m.role.toUpperCase()}] ${m.author}:</strong>
+                        <span style="color: var(--text-sub);">${m.text}</span>
+                    </div>
+                `).join('');
+                box.scrollTop = box.scrollHeight;
+            } catch (err) {}
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            if (!input.value.trim()) return;
+
+            try {
+                await apiFetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: input.value })
+                });
+                input.value = '';
+                loadChat();
+            } catch (err) { alert(err.message); }
+        }
+
+        async function loadInvites() {
+            try {
+                const res = await apiFetch('/invites/my');
+                const invites = await res.json();
+                document.getElementById('invites-table').innerHTML = invites.map(i => `
+                    <tr>
+                        <td><code>${i.code}</code></td>
+                        <td>${i.used_by ? `<span style="color: var(--accent-red);">${i.used_by}</span>` : '<span style="color:#34c759;">Available</span>'}</td>
+                    </tr>
+                `).join('');
+            } catch (err) {}
+        }
+
+        async function generateInvite() {
+            try {
+                const res = await apiFetch('/invites/generate', { method: 'POST' });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail);
+                loadInvites();
+            } catch (err) { alert(err.message); }
+        }
+
+        async function loadAdminUsers() {
+            try {
+                const res = await apiFetch('/admin/users');
+                const users = await res.json();
+                const adminTable = document.getElementById('admin-users-table');
+                if (adminTable) {
+                    adminTable.innerHTML = users.map(u => `
+                        <tr>
+                            <td>${u.uid}</td>
+                            <td>${u.username}</td>
+                            <td>${u.role}</td>
+                            <td>${u.invited_by}</td>
+                            <td>${u.is_banned ? '<span style="color:var(--accent-red);">Banned</span>' : '<span style="color:#34c759;">Active</span>'}</td>
+                            <td>
+                                ${u.role !== 'owner' ? `
+                                    <button onclick="toggleBan(${u.uid})" style="background:var(--accent-red); color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:11px;">
+                                        ${u.is_banned ? 'Unban' : 'Ban'}
+                                    </button>
+                                ` : ''}
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) {}
+        }
+
+        async function toggleBan(userId) {
+            try {
+                await apiFetch(`/admin/toggle-ban/${userId}`, { method: 'POST' });
+                loadAdminUsers();
+            } catch (err) {}
+        }
+
+        if (localStorage.getItem('token')) {
+            initApp();
+        }
+    </script>
+</body>
+</html>
